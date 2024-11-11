@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Casillero</title>
+</head>
+<body>
+    <h1>Detalle del Casillero</h1>
+    <p>ID: {{ casillero.id }}</p>
+    <p>Usuario: {{ casillero.usuario.name }}</p>
+    <p>Email: {{ casillero.usuario.email }}</p>
+    <p>Contraseña: {{ casillero.password }}</p>
+
+    <h2>Cambiar Contraseña</h2>
+    <form method="POST">
+        {% csrf_token %}
+        
+        <!-- Solo mostrar el campo de la nueva contraseña sin los errores repetidos -->
+        <label for="{{ form.password.id_for_label }}">Contraseña</label>
+        {{ form.password }}
+
+        {% if form.password.errors %}
+            <ul>
+                {% for error in form.password.errors %}
+                    <li style="color: red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
+        <button type="submit" name="cambiar_contraseña">Cambiar Contraseña</button>
+    </form>
+
+    <h2>Cambiar Usuario</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="nuevo_usuario_id">Nuevo Usuario:</label>
+        <select name="nuevo_usuario_id" id="nuevo_usuario_id">
+            {% for usuario in usuarios %}
+                <option value="{{ usuario.id }}">{{ usuario.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" name="cambiar_usuario">Cambiar Usuario</button>
+    </form>
+
+    <br>
+    <a href="{% url 'casilleros_list' %}">Volver a la lista de casilleros</a>
+</body>
+</html>

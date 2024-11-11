@@ -1,0 +1,25 @@
+<h1>Lista de Casilleros</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Contraseña</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for casillero in casilleros %}
+            <tr>
+                <td>{{ casillero.id }}</td>
+                <td>{{ casillero.usuario.name }}</td>
+                <td>{{ casillero.usuario.email }}</td>
+                <td>{{ casillero.password }}</td>
+                <td>
+                    <a href="{% url 'locker_detail' casillero.id %}">Ver</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

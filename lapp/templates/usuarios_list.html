@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Usuarios</title>
+</head>
+<body>
+    <h1>Lista de Usuarios</h1>
+    <ul>
+        {% for usuario in usuarios %}
+            <li>{{ usuario.name }} - {{ usuario.email }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'usuario_create' %}">Crear nuevo usuario</a>
+</body>
+</html>
