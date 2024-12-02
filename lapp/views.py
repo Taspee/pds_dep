@@ -148,3 +148,17 @@ def usuario_delete(request, usuario_id):
         usuario.delete()
         return redirect('usuarios_list')
     return render(request, 'usuario_confirm_delete.html', {'usuario': usuario})
+
+
+def user_dashboard(request):
+    # Contexto vacío o con datos iniciales para pruebas
+    context = {
+        "total_openings_monthly": 120,
+        "peak_usage_hour": "14:00",
+        "average_opening_time_weekly": 7.5,
+        "recent_activity": [
+            {"date": "2024-12-01", "locker_id": 1, "action": "Opened", "details": "Locker opened by User 1"},
+            {"date": "2024-12-01", "locker_id": 2, "action": "Closed", "details": "Locker closed by User 2"},
+        ]
+    }
+    return render(request, 'user_dashboard.html', context)

@@ -6,6 +6,7 @@ urlpatterns = [
     path('usuarios/nuevo/', views.usuario_create, name='usuario_create'),
     path('usuarios/<int:usuario_id>/editar/', views.usuario_update, name='usuario_update'),
     path('usuarios/<int:usuario_id>/eliminar/', views.usuario_delete, name='usuario_delete'),
-    path('', views.casilleros_list, name='casilleros_list'),
+    path('/admin', views.casilleros_list, name='casilleros_list'),
+    path('', views.user_dashboard, name='user_dashboard'),
     path('casilleros/<int:casillero_id>/', views.casillero_detail, name='locker_detail'),  # Detalles del casillero
 ]

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Metrics{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="text-center mt-5">User Metrics</h3>
+    <div class="row mt-3">
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Total Openings (Monthly)</h5>
+                    <h2>{{ total_openings_monthly }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-secondary">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Peak Usage Hour</h5>
+                    <h2>{{ peak_usage_hour }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-danger">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Average Opening Time (Weekly)</h5>
+                    <h2>{{ average_opening_time_weekly }} min</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="text-center mt-5">Recent Activity</h3>
+    <div class="table-responsive mt-3">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Date</th>
+                    <th>Locker</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in recent_activity %}
+                    <tr>
+                        <td>{{ activity.date }}</td>
+                        <td>{{ activity.locker_id }}</td>
+                        <td>{{ activity.action }}</td>
+                        <td>{{ activity.details }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
