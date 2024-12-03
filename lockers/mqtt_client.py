@@ -63,6 +63,39 @@ def on_message(client, userdata, msg):
 
         except (json.JSONDecodeError, KeyError):
             print("Error processing message or invalid JSON format")
+    if msg.topic == "close_locker_g6":
+        try:
+            data = json.loads(msg.payload.decode())
+            locker_id = data.get("id")
+
+            current_time = time.time()
+            if locker_id in recent_messages and current_time - recent_messages[locker_id] < 5:
+                print(f"Duplicate message ignored for locker ID {locker_id}")
+                return
+
+            recent_messages[locker_id] = current_time
+
+            casillero = get_object_or_404(Casillero, id=locker_id)
+            usuario = casillero.usuario
+
+            asunto = 'Notificación de cerrado de casillero'
+            mensaje = f"<p>Hola {usuario.name},</p><p>Tu casillero con ID {casillero.id} ha sido cerrado.</p>"
+            destinatarios = [usuario.email]
+
+            email = EmailMessage(
+                asunto,
+                mensaje,
+                settings.DEFAULT_FROM_EMAIL,
+                destinatarios,
+            )
+            email.content_subtype = "html"
+            email.send()
+
+            print(f"Notification sent to {usuario.email} for locker ID {casillero.id}")
+
+        except (json.JSONDecodeError, KeyError):
+            print("Error processing message or invalid JSON format")
+
 
 # Función para enviar mensajes al broker MQTT
 def send_message(topic, message):
