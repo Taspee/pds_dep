@@ -17,11 +17,15 @@
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-3">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Lockers</a>
+                        <a class="nav-link" href="{% url 'casilleros_list' %}">Lockers</a>
                     </li>
-                    <li class="nav-item">
+             <!--       <li class="nav-item">
                         <a class="nav-link" href="{% url 'usuarios_list' %}">Users</a>
+                    </li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'usuarios_list' %}">Admin</a>
                     </li>
+
                 </ul>
             </div>
         </div>
