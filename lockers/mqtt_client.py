@@ -19,6 +19,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected to broker successfully")
         client.subscribe("open_locker_g6")  # Suscribirse al topic "open_locker"
+        client.subscribe("close_locker_g6")  # Suscribirse al topic "open_locker"
     else:
         print("Failed to connect. Return code:", rc)
 
@@ -63,7 +64,7 @@ def on_message(client, userdata, msg):
 
         except (json.JSONDecodeError, KeyError):
             print("Error processing message or invalid JSON format")
-    if msg.topic == "close_locker_g6":
+    elif msg.topic == "close_locker_g6":
         try:
             data = json.loads(msg.payload.decode())
             locker_id = data.get("id")
@@ -98,7 +99,7 @@ def on_message(client, userdata, msg):
 
 
 # Función para enviar mensajes al broker MQTT
-def send_message(topic, message):
+def send_message(topic, mssage):
     result = client.publish(topic, message)
     status = result[0]
     if status == 0:
