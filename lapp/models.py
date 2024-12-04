@@ -19,6 +19,7 @@ class Casillero(models.Model):
 
 class Controller(models.Model):
     # Atributos para el modelo Casillero
+    name = models.CharField(max_length=200)
     casillero = models.ForeignKey(Casillero, on_delete=models.CASCADE)  # Relación con el modelo Usuario
 
     def __str__(self):
