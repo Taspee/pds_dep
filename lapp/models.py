@@ -9,18 +9,19 @@ class Usuario(models.Model):
     def __str__(self):
         return self.name
 
-class Casillero(models.Model):
-    # Atributos para el modelo Casillero
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # Relación con el modelo Usuario
-    password = models.CharField(max_length=100)  # Contraseña del casillero
+class Controller(models.Model):
+    name = models.CharField(max_length=200)
 
     def __int__(self):
         return self.id
 
-class Controller(models.Model):
-    # Atributos para el modelo Casillero
-    name = models.CharField(max_length=200)
-    casillero = models.ForeignKey(Casillero, on_delete=models.CASCADE)  # Relación con el modelo Usuario
 
-    def __str__(self):
-        return self.name
+class Casillero(models.Model):
+    # Atributos para el modelo Casillero
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # Relación con el modelo Usuario
+    password = models.CharField(max_length=100)  # Contraseña del casillero
+    controller = models.ForeignKey(Controller, on_delete=models.CASCADE, related_name='casilleros')
+
+    def __int__(self):
+        return self.id
+
