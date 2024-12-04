@@ -20,14 +20,17 @@ def on_connect(client, userdata, flags, rc):
         print("Connected to broker successfully")
         client.subscribe("open_locker_g6")  # Suscribirse al topic "open_locker"
         client.subscribe("close_locker_g6")  # Suscribirse al topic "open_locker"
+        client.subscribe("status_response_c1_g6")  # Suscribirse al topic "open_locker"
     else:
         print("Failed to connect. Return code:", rc)
 
 # Callback para manejar los mensajes recibidos
 def on_message(client, userdata, msg):
     print(f"Received message: {msg.payload.decode()} on topic: {msg.topic}")
-    
-    if msg.topic == "open_locker_g6":
+    if msg.topic == "status_response_c1_g6":
+        global conectedc1
+        conectedc1 = True
+    elif msg.topic == "open_locker_g6":
         try:
             # Parsear el mensaje JSON
             data = json.loads(msg.payload.decode())

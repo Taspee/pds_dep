@@ -5,9 +5,12 @@ from django.conf import settings  # Para obtener las credenciales desde settings
 from .forms import CasilleroPasswordForm
 from .forms import UsuarioForm  # Asegúrate de crear un formulario para Usuario
 from django.core.mail import EmailMessage
-from lockers.mqtt_client import send_message
+from lockers.mqtt_client import send_message, on_message, on_connect
 from django.http import HttpResponse
 import json
+from django.http import JsonResponse
+import time
+
 
 def mqtt_message_received(request):
     # Handle received MQTT messages here
@@ -173,11 +176,22 @@ def locker_per_controller(request,controller_id):
     return render(request, 'casilleros_list.html', {'casilleros':casilleros})
 
 def check_status(request, controller_id):
+    global conectedc1
+    conectedc1 = True
     if controller_id == 1:
         mqtt_message = {
             "id": controller_id,
                     }
         send_message("check_status_c1_g6", json.dumps(mqtt_message))  # Publicar el mensaje con JSON
+        for _ in range(5):
+            if conectedc1:
+                break
+            time.sleep(1)
+        if conectedc1:
+            return JsonResponse({'status': 'conected'})
+        else:
+            return JsonResponse({'status': 'Not conected'})
+
     else:
         mqtt_message = {
             "id": controller_id,
