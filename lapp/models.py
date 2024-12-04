@@ -14,7 +14,7 @@ class Casillero(models.Model):
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)  # Relación con el modelo Usuario
     password = models.CharField(max_length=100)  # Contraseña del casillero
 
-    def __str__(self):
+    def __int__(self):
         return self.id
 
 class Controller(models.Model):
