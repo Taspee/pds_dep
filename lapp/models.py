@@ -17,7 +17,7 @@ class Casillero(models.Model):
     def __str__(self):
         return f"Casillero {self.id} de {self.usuario.name}"
 
-class Contoller(models.Model):
+class Controller(models.Model):
     # Atributos para el modelo Casillero
     casillero = models.ForeignKey(Casillero, on_delete=models.CASCADE)  # Relación con el modelo Usuario
 
