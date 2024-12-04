@@ -9,5 +9,6 @@ urlpatterns = [
     path('/admin', views.casilleros_list, name='casilleros_list'),
     path('', views.user_dashboard, name='user_dashboard'),
     path('casilleros/<int:casillero_id>/', views.casillero_detail, name='locker_detail'),  # Detalles del casillero
-    path('controllers/',views.show_controllers,name='controllers')
+    path('controllers/',views.show_controllers,name='controllers'),
+    path('controllers/<int:controller_id>',views.locker_per_controller,name='locker_per_controller'),    
 ]

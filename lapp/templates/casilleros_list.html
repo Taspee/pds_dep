@@ -23,16 +23,6 @@
                         <td>{{ casillero.usuario.name }}</td>
                         <td>{{ casillero.usuario.email }}</td>
                         <td>{{ casillero.password }}</td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn btn-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="bi bi-three-dots"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                  <li><a href="{% url 'locker_detail' casillero.id %}" class="dropdown-item"> Show </a></li>
-                                </ul>
-                              </div>
-                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

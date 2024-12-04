@@ -166,3 +166,8 @@ def user_dashboard(request):
 def show_controllers(request):
     controller = Controller.objects.all()
     return render(request,'controllers.html',{'controller':controller})
+
+def locker_per_controller(request,controller_id):
+    controller = get_object_or_404(Controller, id=controller_id)
+    casilleros= Casillero.objects.filter(controller_id=controller_id)
+    return render(request, 'casilleros_list.html', {'casilleros':casilleros})
