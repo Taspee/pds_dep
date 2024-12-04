@@ -15,7 +15,7 @@ class Casillero(models.Model):
     password = models.CharField(max_length=100)  # Contraseña del casillero
 
     def __str__(self):
-        return f"Casillero {self.id} de {self.usuario.name}"
+        return self.id
 
 class Controller(models.Model):
     # Atributos para el modelo Casillero
