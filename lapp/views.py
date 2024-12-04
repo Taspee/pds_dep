@@ -171,3 +171,20 @@ def locker_per_controller(request,controller_id):
     controller = get_object_or_404(Controller, id=controller_id)
     casilleros= Casillero.objects.filter(controller_id=controller_id)
     return render(request, 'casilleros_list.html', {'casilleros':casilleros})
+
+def check_status(request, controller_id):
+    if controller_id == 1:
+        mqtt_message = {
+            "id": controller_id,
+                    }
+        send_message("check_status_c1_g6", json.dumps(mqtt_message))  # Publicar el mensaje con JSON
+    else:
+        mqtt_message = {
+            "id": controller_id,
+                    }
+        send_message("check_status_c2_g6", json.dumps(mqtt_message))  # Publicar el mensaje con JSON
+
+    return render(request,'controllers.html')
+
+
+

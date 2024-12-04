@@ -99,7 +99,7 @@ def on_message(client, userdata, msg):
 
 
 # Función para enviar mensajes al broker MQTT
-def send_message(topic, mssage):
+def send_message(topic, message):
     result = client.publish(topic, message)
     status = result[0]
     if status == 0:

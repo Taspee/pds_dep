@@ -11,4 +11,6 @@ urlpatterns = [
     path('casilleros/<int:casillero_id>/', views.casillero_detail, name='locker_detail'),  # Detalles del casillero
     path('controllers/',views.show_controllers,name='controllers'),
     path('controllers/<int:controller_id>',views.locker_per_controller,name='locker_per_controller'),    
+    path('controller/<int:controller_id>',views.check_status,name='check_status'),
+
 ]
