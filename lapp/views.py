@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Casillero, Usuario
+from .models import Casillero, Usuario, Controller
 from .email_operations import EmailOperations  # Importa la clase
 from django.conf import settings  # Para obtener las credenciales desde settings.py
 from .forms import CasilleroPasswordForm
@@ -162,3 +162,7 @@ def user_dashboard(request):
         ]
     }
     return render(request, 'user_dashboard.html', context)
+
+def show_controllers(request):
+    controller = Controller.objects.all()
+    return render(request,'controllers.html',{'controller':controller})
