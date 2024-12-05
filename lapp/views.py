@@ -25,17 +25,40 @@ def casilleros_list(request):
 def casillero_detail(request, casillero_id):
     casillero = get_object_or_404(Casillero, id=casillero_id)
     usuarios = Usuario.objects.all()  # Obtén todos los usuarios para mostrarlos en el formulario
+    form = None  # Inicializa el formulario para evitar errores de referencia
 
     if request.method == 'POST':
         # Si se presionó el botón para cambiar la contraseña
         if 'cambiar_contraseña' in request.POST:
-            form = CasilleroPasswordForm(request.POST, instance=casillero)
-            if form.is_valid():
-                form.save()  # Guarda la nueva contraseña
+            new_password = request.POST.get('new_password')
+            if new_password and len(new_password) == 4:
+                casillero.password = new_password
+                casillero.save()
                 
+                formatted_password = ""
+                for char in casillero.password:
+                    if char == '1':
+                        formatted_password += '✋'
+                    elif char == '2':
+                        formatted_password += '👆'
+                    elif char == '3':
+                        formatted_password += '🤜'
+                    elif char == '4':
+                        formatted_password += '🫵'
+                    elif char == '5':
+                        formatted_password += '👌'
+                    elif char == '6':
+                        formatted_password += '🫷'
+                    else:
+                        formatted_password += char
+
                 # Enviar correo electrónico notificando el cambio de contraseña
                 asunto = 'Tu contraseña ha sido cambiada'
-                mensaje = f"<p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p><p>Tu nueva contraseña es: {casillero.password}</p>"
+                mensaje = f"""
+                <p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p>
+                <p>Tu nueva contraseña es: {formatted_password}</p>
+                <p>Recuerda que debes presionar el botón correspondiente al casillero {casillero.id}.</p>
+                """
                 destinatarios = [casillero.usuario.email]
 
                 email = EmailMessage(
@@ -64,12 +87,29 @@ def casillero_detail(request, casillero_id):
                 casillero.usuario = nuevo_usuario
                 casillero.save()
 
+                formatted_password = ""
+                for char in casillero.password:
+                    if char == '1':
+                        formatted_password += '✋'
+                    elif char == '2':
+                        formatted_password += '👆'
+                    elif char == '3':
+                        formatted_password += '🤜'
+                    elif char == '4':
+                        formatted_password += '🫵'
+                    elif char == '5':
+                        formatted_password += '👌'
+                    elif char == '6':
+                        formatted_password += '🫷'
+                    else:
+                        formatted_password += char
+
                 # Enviar correo electrónico al nuevo usuario notificando el ID del casillero y su contraseña
                 asunto = 'Nuevo Casillero Asignado'
                 mensaje = f"""
                 <p>Hola {nuevo_usuario.name},</p>
-                <p>Se te ha asignado el Casillero ID: {casillero.id}.</p>
-                <p>Tu contraseña es: {casillero.password}</p>
+                <p>Se te ha asignado el Casillero: {casillero.id}.</p>
+                <p>Tu contraseña es: {formatted_password}</p>
                 """
                 destinatarios = [nuevo_usuario.email]
 
@@ -84,7 +124,8 @@ def casillero_detail(request, casillero_id):
 
                 return redirect('locker_detail', casillero_id=casillero.id)
 
-    else:
+    # Inicializa el formulario si no es un POST o si no hay cambios
+    if not form:
         form = CasilleroPasswordForm(instance=casillero)
 
     return render(request, 'casillero_detail.html', {
@@ -177,7 +218,9 @@ def locker_per_controller(request,controller_id):
 
 def check_status(request, controller_id):
     global conectedc1
+    global conectedc2
     conectedc1 = True
+    conectedc2 = True
     if controller_id == 1:
         mqtt_message = {
             "id": controller_id,
@@ -197,6 +240,14 @@ def check_status(request, controller_id):
             "id": controller_id,
                     }
         send_message("check_status_c2_g6", json.dumps(mqtt_message))  # Publicar el mensaje con JSON
+        for _ in range(5):
+            if conectedc2:
+                break
+            time.sleep(1)
+        if conectedc2:
+            return JsonResponse({'status': 'conected'})
+        else:
+            return JsonResponse({'status': 'Not conected'})
 
     return render(request,'controllers.html')
 
