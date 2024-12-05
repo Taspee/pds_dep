@@ -25,7 +25,18 @@
                         <td>{{ casillero.id }}</td>
                         <td>{{ casillero.usuario.name }}</td>
                         <td>{{ casillero.usuario.email }}</td>
-                        <td>{{ casillero.password }}</td>
+                        <td>
+                            {% for char in casillero.password %}
+                                {% if char == '1' %} ✋
+                                {% elif char == '2' %} 👆
+                                {% elif char == '3' %} 🤜
+                                {% elif char == '4' %} 🫵
+                                {% elif char == '5' %} 👌
+                                {% elif char == '6' %} 🫷
+                                {% else %} {{ char }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn btn-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">

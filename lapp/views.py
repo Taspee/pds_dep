@@ -35,9 +35,30 @@ def casillero_detail(request, casillero_id):
                 casillero.password = new_password
                 casillero.save()
                 
+                formatted_password = ""
+                for char in casillero.password:
+                    if char == '1':
+                        formatted_password += '✋'
+                    elif char == '2':
+                        formatted_password += '👆'
+                    elif char == '3':
+                        formatted_password += '🤜'
+                    elif char == '4':
+                        formatted_password += '🫵'
+                    elif char == '5':
+                        formatted_password += '👌'
+                    elif char == '6':
+                        formatted_password += '🫷'
+                    else:
+                        formatted_password += char
+
                 # Enviar correo electrónico notificando el cambio de contraseña
                 asunto = 'Tu contraseña ha sido cambiada'
-                mensaje = f"<p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p><p>Tu nueva contraseña es: {casillero.password}</p><p>Recuerda que debes presionar el boton correspondiente al casillero {casillero.id} y los gestos son: ✋: 1, 👆: 2, 🤜: 3, 🫵: 4, 👌: 5, 🫷: 6 </p>"
+                mensaje = f"""
+                <p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p>
+                <p>Tu nueva contraseña es: {formatted_password}</p>
+                <p>Recuerda que debes presionar el botón correspondiente al casillero {casillero.id}.</p>
+                """
                 destinatarios = [casillero.usuario.email]
 
                 email = EmailMessage(
@@ -66,12 +87,29 @@ def casillero_detail(request, casillero_id):
                 casillero.usuario = nuevo_usuario
                 casillero.save()
 
+                formatted_password = ""
+                for char in casillero.password:
+                    if char == '1':
+                        formatted_password += '✋'
+                    elif char == '2':
+                        formatted_password += '👆'
+                    elif char == '3':
+                        formatted_password += '🤜'
+                    elif char == '4':
+                        formatted_password += '🫵'
+                    elif char == '5':
+                        formatted_password += '👌'
+                    elif char == '6':
+                        formatted_password += '🫷'
+                    else:
+                        formatted_password += char
+
                 # Enviar correo electrónico al nuevo usuario notificando el ID del casillero y su contraseña
                 asunto = 'Nuevo Casillero Asignado'
                 mensaje = f"""
                 <p>Hola {nuevo_usuario.name},</p>
-                <p>Se te ha asignado el Casillero ID: {casillero.id}.</p>
-                <p>Tu contraseña es: {casillero.password}</p>
+                <p>Se te ha asignado el Casillero: {casillero.id}.</p>
+                <p>Tu contraseña es: {formatted_password}</p>
                 """
                 destinatarios = [nuevo_usuario.email]
 
