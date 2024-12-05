@@ -10,6 +10,10 @@ from django.http import HttpResponse
 import json
 from django.http import JsonResponse
 import time
+from .models import MqttInteraction
+
+def log_mqtt_interaction(action, topic, user=None):
+    MqttInteraction.objects.create(action=action, topic=topic, user=user)
 
 
 def mqtt_message_received(request):
@@ -195,17 +199,8 @@ def usuario_delete(request, usuario_id):
 
 
 def user_dashboard(request):
-    # Contexto vacío o con datos iniciales para pruebas
-    context = {
-        "total_openings_monthly": 120,
-        "peak_usage_hour": "14:00",
-        "average_opening_time_weekly": 7.5,
-        "recent_activity": [
-            {"date": "2024-12-01", "locker_id": 1, "action": "Opened", "details": "Locker opened by User 1"},
-            {"date": "2024-12-01", "locker_id": 2, "action": "Closed", "details": "Locker closed by User 2"},
-        ]
-    }
-    return render(request, 'user_dashboard.html', context)
+    logs = MqttInteraction.objects.all()
+    return render(request, 'user_dashboard.html', {"logs":logs})
 
 def show_controllers(request):
     controller = Controller.objects.all()
@@ -221,6 +216,7 @@ def check_status(request, controller_id):
     global conectedc2
     conectedc1 = True
     conectedc2 = True
+
     if controller_id == 1:
         mqtt_message = {
             "id": controller_id,

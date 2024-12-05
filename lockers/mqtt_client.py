@@ -6,6 +6,10 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404
 import time
+from lapp.models import MqttInteraction, Usuario
+
+def log_mqtt_interaction(action, topic, user=None):
+    MqttInteraction.objects.create(action=action, topic=topic, user=user)
 
 recent_messages = {}
 # Configura Django para cargar las aplicaciones
@@ -64,6 +68,7 @@ def on_message(client, userdata, msg):
             email.send()
 
             print(f"Notification sent to {usuario.email} for locker ID {casillero.id}")
+            log_mqtt_interaction(action="publish", topic="open", user= usuario)
 
         except (json.JSONDecodeError, KeyError):
             print("Error processing message or invalid JSON format")
@@ -96,7 +101,7 @@ def on_message(client, userdata, msg):
             email.send()
 
             print(f"Notification sent to {usuario.email} for locker ID {casillero.id}")
-
+            log_mqtt_interaction(action="publish", topic="close", user= usuario)
         except (json.JSONDecodeError, KeyError):
             print("Error processing message or invalid JSON format")
 

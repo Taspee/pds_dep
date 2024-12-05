@@ -30,7 +30,7 @@ class MqttInteraction(models.Model):
     timestamp = models.DateTimeField(default=now)  
     action = models.CharField(max_length=50)  
     topic = models.CharField(max_length=255)  
-    user = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)  
+    user = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True) 
     
     def __int__(self):
         return self.id

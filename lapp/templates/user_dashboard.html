@@ -38,18 +38,18 @@
             <thead class="table-dark">
                 <tr>
                     <th>Date</th>
-                    <th>Locker</th>
                     <th>Action</th>
-                    <th>Details</th>
+                    <th>Topic</th>
+                    <th>User</th>
                 </tr>
             </thead>
             <tbody>
-                {% for activity in recent_activity %}
+                {% for log in logs %}
                     <tr>
-                        <td>{{ activity.date }}</td>
-                        <td>{{ activity.locker_id }}</td>
-                        <td>{{ activity.action }}</td>
-                        <td>{{ activity.details }}</td>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.topic }}</td>
+                        <td>{{ log.user.id }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
