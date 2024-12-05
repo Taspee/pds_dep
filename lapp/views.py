@@ -35,7 +35,7 @@ def casillero_detail(request, casillero_id):
                 
                 # Enviar correo electrónico notificando el cambio de contraseña
                 asunto = 'Tu contraseña ha sido cambiada'
-                mensaje = f"<p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p><p>Tu nueva contraseña es: {casillero.password}</p>"
+                mensaje = f"<p>Hola {casillero.usuario.name}, tu contraseña ha sido cambiada con éxito.</p><p>Tu nueva contraseña es: {casillero.password}</p><p>Recuerda que debes presionar el boton correspondiente al casillero {casillero.id} y los gestos son: ✋: 1, 👆: 2, 🤜: 3, 🫵: 4, 👌: 5, 🫷: 6 </p>"
                 destinatarios = [casillero.usuario.email]
 
                 email = EmailMessage(
