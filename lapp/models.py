@@ -1,5 +1,6 @@
 # lockers/models.py
 from django.db import models
+from django.utils.timezone import now
 
 class Usuario(models.Model):
     # Atributos para el modelo Usuario
@@ -25,3 +26,11 @@ class Casillero(models.Model):
     def __int__(self):
         return self.id
 
+class MqttInteraction(models.Model):
+    timestamp = models.DateTimeField(default=now)  
+    action = models.CharField(max_length=50)  
+    topic = models.CharField(max_length=255)  
+    user = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, blank=True)  
+    
+    def __int__(self):
+        return self.id
