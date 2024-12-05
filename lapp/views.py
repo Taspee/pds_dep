@@ -218,7 +218,9 @@ def locker_per_controller(request,controller_id):
 
 def check_status(request, controller_id):
     global conectedc1
+    global conectedc2
     conectedc1 = True
+    conectedc2 = True
     if controller_id == 1:
         mqtt_message = {
             "id": controller_id,
@@ -238,6 +240,14 @@ def check_status(request, controller_id):
             "id": controller_id,
                     }
         send_message("check_status_c2_g6", json.dumps(mqtt_message))  # Publicar el mensaje con JSON
+        for _ in range(5):
+            if conectedc2:
+                break
+            time.sleep(1)
+        if conectedc2:
+            return JsonResponse({'status': 'conected'})
+        else:
+            return JsonResponse({'status': 'Not conected'})
 
     return render(request,'controllers.html')
 

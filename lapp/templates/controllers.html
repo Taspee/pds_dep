@@ -35,8 +35,13 @@
                                 <i class="bi bi-three-dots"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a href="{% url 'check_status' c.id %}" class="dropdown-item"> Check Status </a></li>
-                              </ul>
+                                <li>
+                                    <a href="#" 
+                                    class="dropdown-item check-status" 
+                                    data-url="{% url 'check_status' c.id %}" 
+                                    data-controller-name="{{ c.name }}">Check Status</a>
+                                </li>
+                            </ul>
                         </div>
                     </td>
 
@@ -46,4 +51,41 @@
     </table>
 
 </div>
+
+<div id="alerts-container" class="mt-3"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const checkStatusLinks = document.querySelectorAll('.check-status');
+
+    checkStatusLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const url = this.getAttribute('data-url');
+            const controllerName = this.getAttribute('data-controller-name'); 
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const alertsContainer = document.getElementById('alerts-container');
+                    const alert = document.createElement('div');
+                    alert.className = `alert ${data.status === 'conected' ? 'alert-success' : 'alert-danger'}`;
+                    alert.textContent = data.status === 'conected' 
+                        ? `${controllerName} is connected!` 
+                        : `${controllerName} is not connected!`;
+                    alertsContainer.innerHTML = ''; 
+                    alertsContainer.appendChild(alert);
+
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error('Error checking status:', error);
+                });
+        });
+    });
+});
+</script>
 {% endblock %}
