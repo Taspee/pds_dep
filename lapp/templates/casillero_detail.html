@@ -49,19 +49,38 @@
     <div class="collapse" id="collapseChangePassword">
         <div class="card card-body">
             <form method="POST">
-                <p><strong>Current Password:</strong> {{ casillero.password }}</p>
+                <p><strong>Current Password:</strong>
+                    {% for char in casillero.password %}
+                        {% if char == '1' %} ✋
+                        {% elif char == '2' %} 👆
+                        {% elif char == '3' %} 🤜
+                        {% elif char == '4' %} 🫵
+                        {% elif char == '5' %} 👌
+                        {% elif char == '6' %} 🫷
+                        {% else %} {{ char }}
+                        {% endif %}
+                    {% endfor %}
+                </p>
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="{{ form.password.id_for_label }}" class="form-label"> <strong>New Password</strong></label>
-                    {{ form.password }}
-                    {% if form.password.errors %}
-                        <ul class="text-danger mt-2">
-                            {% for error in form.password.errors %}
-                                <li>{{ error }}</li>
-                            {% endfor %}
-                        </ul>
-                    {% endif %}
+                    <label for="password_digit_1" class="form-label"><strong>New Password</strong></label>
+                    <div class="row">
+                        {% for i in "1234" %}
+                        <div class="col-md-3">
+                            <select name="password_digit_{{ forloop.counter }}" class="form-select password-select">
+                                <option value="1">✋</option>
+                                <option value="2">👆</option>
+                                <option value="3">🤜</option>
+                                <option value="4">🫵</option>
+                                <option value="5">👌</option>
+                                <option value="6">🫷</option>
+                            </select>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
+                <!-- Campo oculto para enviar la contraseña concatenada -->
+                <input type="hidden" name="new_password" id="new_password" value="">
                 <button type="submit" name="cambiar_contraseña" class="btn btn-dark">Change Password</button>
             </form>
         </div>
@@ -73,6 +92,29 @@
     </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const selects = document.querySelectorAll('.password-select');
+            const hiddenInput = document.getElementById('new_password');
+    
+            function updatePassword() {
+                let newPassword = '';
+                selects.forEach(select => {
+                    newPassword += select.value;
+                });
+                hiddenInput.value = newPassword;
+            }
+    
+            // Actualiza el valor inicial
+            updatePassword();
+    
+            // Escucha cambios en los selectores
+            selects.forEach(select => {
+                select.addEventListener('change', updatePassword);
+            });
+        });
+    </script>
+    
 {% endblock %}
 
 

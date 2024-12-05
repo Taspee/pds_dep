@@ -25,13 +25,15 @@ def casilleros_list(request):
 def casillero_detail(request, casillero_id):
     casillero = get_object_or_404(Casillero, id=casillero_id)
     usuarios = Usuario.objects.all()  # Obtén todos los usuarios para mostrarlos en el formulario
+    form = None  # Inicializa el formulario para evitar errores de referencia
 
     if request.method == 'POST':
         # Si se presionó el botón para cambiar la contraseña
         if 'cambiar_contraseña' in request.POST:
-            form = CasilleroPasswordForm(request.POST, instance=casillero)
-            if form.is_valid():
-                form.save()  # Guarda la nueva contraseña
+            new_password = request.POST.get('new_password')
+            if new_password and len(new_password) == 4:
+                casillero.password = new_password
+                casillero.save()
                 
                 # Enviar correo electrónico notificando el cambio de contraseña
                 asunto = 'Tu contraseña ha sido cambiada'
@@ -84,7 +86,8 @@ def casillero_detail(request, casillero_id):
 
                 return redirect('locker_detail', casillero_id=casillero.id)
 
-    else:
+    # Inicializa el formulario si no es un POST o si no hay cambios
+    if not form:
         form = CasilleroPasswordForm(instance=casillero)
 
     return render(request, 'casillero_detail.html', {
